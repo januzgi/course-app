@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, { StyleRoot } from 'radium';
+import styled from 'styled-components';
+
+const StyledButton = styled.button`
+  background-color: ${(props) => (props.alt ? 'red' : 'green')};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => (props.alt ? 'salmon' : 'lightgreen')};
+    color: black;
+  }
+`;
 
 class App extends Component {
   state = {
@@ -55,20 +69,6 @@ class App extends Component {
   };
 
   render() {
-    const btnStyle = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      // css pseudo-selector hover
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    };
-
     // way 2: By defaul persons is null
     // Preferred way of rendering conditional content
     let persons = null;
@@ -95,12 +95,6 @@ class App extends Component {
           })}
         </div>
       );
-
-      btnStyle.backgroundColor = 'red';
-      btnStyle[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      };
     }
 
     // .css classes
@@ -116,17 +110,19 @@ class App extends Component {
     }
 
     return (
-      // Wrap the whole app component to styleroot to use Radium with mediaqueries
-      <StyleRoot>
-        <div className='App'>
-          <h1>Hi, I'm a React App</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button style={btnStyle} onClick={this.togglePersonsHandler}>
-            Toggle Visibility
-          </button>
-          {/* What to do if the below is true (before the question mark) */}
-          {/* way 1: {this.state.showPersons ? ( */}
-          {/* <div>
+      <div className='App'>
+        <h1>Hi, I'm a React App</h1>
+        <p className={classes.join(' ')}>This is really working!</p>
+        <StyledButton
+          alt={this.state.showPersons}
+          onClick={this.togglePersonsHandler}
+        >
+          Toggle Visibility
+        </StyledButton>
+
+        {/* What to do if the below is true (before the question mark) */}
+        {/* way 1: {this.state.showPersons ? ( */}
+        {/* <div>
           <Person
             name={this.state.persons[0].name}
             age={this.state.persons[0].age}
@@ -144,17 +140,15 @@ class App extends Component {
             age={this.state.persons[2].age}
           />
         </div> */}
-          {/* way 1: ) : // else condition, if the before is true, render then, if false then do nothing
+        {/* way 1: ) : // else condition, if the before is true, render then, if false then do nothing
         null} */}
 
-          {/* way 2: */}
-          {persons}
-        </div>
-      </StyleRoot>
+        {/* way 2: */}
+        {persons}
+      </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-// Wrap with Radium to use the pseudo-selectors
-export default Radium(App);
+export default App;

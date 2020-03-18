@@ -1,55 +1,160 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium, { StyleRoot } from 'radium';
 
 class App extends Component {
   state = {
     persons: [
-      { name: 'Jeea', age: 28 },
-      { name: 'Pate', age: 29 },
-      { name: 'Kukko', age: 26 }
+      { id: 'fasd', name: 'Jeea', age: 28 },
+      { id: 'asfs', name: 'Pate', age: 29 },
+      { id: '2421s', name: 'Kukko', age: 26 }
     ],
-    otherState: 'some other value'
+    otherState: 'some other value',
+    showPersons: false
   };
 
-  // 'this' syntax only works with arrow functions as it refers to
-  // the class App
-  switchNameHandler = () => {
-    // console.log('Was clicked!');
-    // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
-    this.setState({
-      persons: [
-        { name: 'Jeeaansi', age: 28 },
-        { name: 'Pate', age: 29 },
-        { name: 'Kukko', age: 27 }
-      ]
+  // Objects are reference types, thus if
+  // we splice it we splice the original data
+  deletePersonHandler = (personIndex) => {
+    // Thus create a copy of the array
+    // const persons = this.state.persons.slice();
+    // Or use spread from ES6, most modern solution
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({ persons: persons });
+  };
+
+  nameChangedHandler = (event, id) => {
+    // Use the findIndex method with the arrow function to
+    // get the required person object
+    const personIndex = this.state.persons.findIndex((p) => {
+      return p.id === id;
     });
+    // Get the person by accessing the persons index in the array
+    const person = {
+      // Use the spread again to fetch the object properties to a new object
+      ...this.state.persons[personIndex]
+    };
+    // Alternative for the above
+    // const person = Object.assign({}, this.state.persons[personIndex]);
+
+    // Then use the name
+    person.name = event.target.value;
+
+    // Working with copying the original
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    this.setState({ persons: persons });
+  };
+
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState({ showPersons: !doesShow });
   };
 
   render() {
+    const btnStyle = {
+      backgroundColor: 'green',
+      color: 'white',
+      font: 'inherit',
+      border: '1px solid blue',
+      padding: '8px',
+      cursor: 'pointer',
+      // css pseudo-selector hover
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
+    };
+
+    // way 2: By defaul persons is null
+    // Preferred way of rendering conditional content
+    let persons = null;
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          {/* Convert this array into JSX */}
+          {this.state.persons.map((person, index) => {
+            return (
+              <Person
+                // alternative for arrow function
+                // would be .bind(this, index)
+                click={() => this.deletePersonHandler(index)}
+                name={person.name}
+                age={person.age}
+                // Key property so React stays up-to-date on
+                // which elements changed and which to update
+                key={person.id}
+                // Use arrow function again to pass the id
+                // and listener event data from the function
+                changed={(event) => this.nameChangedHandler(event, person.id)}
+              />
+            );
+          })}
+        </div>
+      );
+
+      btnStyle.backgroundColor = 'red';
+      btnStyle[':hover'] = {
+        backgroundColor: 'salmon',
+        color: 'black'
+      };
+    }
+
+    // .css classes
+    // let classes = ['red', 'bold'].join(' ');
+    // Turns into "red bold" with join, it is valid css class list
+    let classes = [];
+    // Red if less than 3
+    if (this.state.persons.length <= 2) {
+      classes.push('red'); // classes ) ['red']
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push('bold'); // classes = ['red', 'bold']
+    }
+
     return (
-      <div className='App'>
-        <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
-        <button onClick={this.switchNameHandler}>Switch Name</button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-        />
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-        >
-          My Hobbies: Racing
-        </Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        />
-      </div>
+      // Wrap the whole app component to styleroot to use Radium with mediaqueries
+      <StyleRoot>
+        <div className='App'>
+          <h1>Hi, I'm a React App</h1>
+          <p className={classes.join(' ')}>This is really working!</p>
+          <button style={btnStyle} onClick={this.togglePersonsHandler}>
+            Toggle Visibility
+          </button>
+          {/* What to do if the below is true (before the question mark) */}
+          {/* way 1: {this.state.showPersons ? ( */}
+          {/* <div>
+          <Person
+            name={this.state.persons[0].name}
+            age={this.state.persons[0].age}
+          />
+          <Person
+            click={this.switchNameHandler.bind(this, 'Jeaansi')}
+            changed={this.nameChangedHandler}
+            name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+          >
+            My Hobbies: Racing
+          </Person>
+          <Person
+            name={this.state.persons[2].name}
+            age={this.state.persons[2].age}
+          />
+        </div> */}
+          {/* way 1: ) : // else condition, if the before is true, render then, if false then do nothing
+        null} */}
+
+          {/* way 2: */}
+          {persons}
+        </div>
+      </StyleRoot>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default App;
+// Wrap with Radium to use the pseudo-selectors
+export default Radium(App);

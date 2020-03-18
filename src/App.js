@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import classes from './App.css';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   state = {
@@ -66,19 +67,22 @@ class App extends Component {
           {/* Convert this array into JSX */}
           {this.state.persons.map((person, index) => {
             return (
-              <Person
-                // alternative for arrow function
-                // would be .bind(this, index)
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                age={person.age}
+              <ErrorBoundary
                 // Key property so React stays up-to-date on
                 // which elements changed and which to update
                 key={person.id}
-                // Use arrow function again to pass the id
-                // and listener event data from the function
-                changed={(event) => this.nameChangedHandler(event, person.id)}
-              />
+              >
+                <Person
+                  // alternative for arrow function
+                  // would be .bind(this, index)
+                  click={() => this.deletePersonHandler(index)}
+                  name={person.name}
+                  age={person.age}
+                  // Use arrow function again to pass the id
+                  // and listener event data from the function
+                  changed={(event) => this.nameChangedHandler(event, person.id)}
+                />
+              </ErrorBoundary>
             );
           })}
         </div>

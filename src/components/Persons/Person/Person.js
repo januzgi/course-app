@@ -1,15 +1,8 @@
 import React from 'react';
-
-// to not run 'npm run eject' you can rename and import .css files as
-// ./filename.module.css
 import classes from './Person.css';
 
 const person = (props) => {
-  const rnd = Math.random();
-  if (rnd > 0.7) {
-    throw new Error('Something went wrong.');
-  }
-
+  console.log('[Person.js] rendering...');
   return (
     <div className={classes.Person}>
       <p onClick={props.click}>

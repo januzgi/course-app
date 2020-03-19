@@ -27,8 +27,20 @@ class App extends Component {
     return state;
   }
 
+  // Important hooks DidMount and DidUpdate
+  // Fetching data from server for example
   componentDidMount() {
     console.log('[App.js] componentDidMount');
+  }
+
+  componentDidUpdate() {
+    console.log('[App.js] componentDidUpdate');
+  }
+
+  // for performance improvements an important hooks
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('[App.js] shouldComponentUpdate');
+    return true;
   }
 
   // Objects are reference types, thus if
@@ -92,7 +104,7 @@ class App extends Component {
         <Cockpit
           title={this.props.appTitle}
           showPersons={this.state.showPersons}
-          persons={this.state.persons}
+          personsLength={this.state.persons.length}
           clicked={this.togglePersonsHandler}
         />
         {persons}

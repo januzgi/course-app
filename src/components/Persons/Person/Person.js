@@ -4,6 +4,18 @@ import classes from './Person.css';
 import PropTypes from 'prop-types';
 
 class Person extends Component {
+  constructor(props) {
+    super(props);
+    // more modern approach to use React.createRef
+    // instead of way 2
+    this.inputElRef = React.createRef();
+  }
+
+  componentDidMount() {
+    // this.inputEl.focus();
+    this.inputElRef.current.focus();
+  }
+
   render() {
     console.log('[Person.js] rendering...');
 
@@ -19,6 +31,11 @@ class Person extends Component {
         <p>{this.props.children}</p>
         <input
           type='text'
+          // way 2:
+          // ref={(inputElement) => {
+          //   this.inputEl = inputElement;
+          // }}
+          ref={this.inputElRef}
           onChange={this.props.changed}
           value={this.props.name}
         />

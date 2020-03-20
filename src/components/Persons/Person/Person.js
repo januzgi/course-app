@@ -12,9 +12,14 @@ class Person extends Component {
     this.inputElRef = React.createRef();
   }
 
+  // This allows React to automatically connect this Person component
+  // to the context and gives the this.contect prop
+  static contextType = AuthContext;
+
   componentDidMount() {
     // this.inputEl.focus();
     this.inputElRef.current.focus();
+    console.log(this.context.authenticated);
   }
 
   render() {
@@ -26,15 +31,11 @@ class Person extends Component {
       // <div className={classes.Person}>
       // import classes from './Person.css';
       <Fragment>
-        <AuthContext.Consumer>
-          {(context) =>
-            context.authenticated ? (
-              <p>Authenticated!</p>
-            ) : (
-              <p>Please log in.</p>
-            )
-          }
-        </AuthContext.Consumer>
+        {this.context.authenticated ? (
+          <p>Authenticated!</p>
+        ) : (
+          <p>Please log in.</p>
+        )}
         <p onClick={this.props.click}>
           I'm {this.props.name} and I am {this.props.age} years old.
         </p>

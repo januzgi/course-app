@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import classes from './Cockpit.css';
 import AuthContext from '../../context/auth-context';
 
 const cockpit = (props) => {
   // Using useRef hook in functional components using useEffect
   const toggleBtnRef = useRef(null);
+  // This hook will hold my AuthContext data
+  const authContext = useContext(AuthContext);
 
   // This is componentDidMount and DidUpdate in one effect
   // You can have as many of the as you want
@@ -57,9 +59,7 @@ const cockpit = (props) => {
       <button ref={toggleBtnRef} className={btnClass} onClick={props.clicked}>
         Toggle Visibility
       </button>
-      <AuthContext.Consumer>
-        {(context) => <button onClick={context.login}>Log in</button>}
-      </AuthContext.Consumer>
+      <button onClick={authContext.login}>Log in</button>
     </div>
   );
 };

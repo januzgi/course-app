@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import classes from './Cockpit.css';
 
 const cockpit = (props) => {
   // This is componentDidMount and DidUpdate in one effect
   // You can have as many of the as you want
+
+  // import { useEffect } from 'react'
   // useEffect(() => {
   //   console.log('[Cockpit.js] useEffect');
   //   // Http request etc. can be sent here

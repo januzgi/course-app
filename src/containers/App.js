@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import withClass from '../components/hoc/withClass';
 
 class App extends Component {
   constructor(props) {
@@ -51,6 +52,11 @@ class App extends Component {
     // Or use spread from ES6, most modern solution
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
+
+    // If a state update depends on the old state, bring prevState
+    // as an argument to setState and return a JS object with
+    // the new state as an object
+    // this.setState((prevState, props) => {return {newstate}});
     this.setState({ persons: persons });
   };
 
@@ -100,7 +106,7 @@ class App extends Component {
     }
 
     return (
-      <div className={classes.App}>
+      <Fragment>
         <Cockpit
           title={this.props.appTitle}
           showPersons={this.state.showPersons}
@@ -108,9 +114,10 @@ class App extends Component {
           clicked={this.togglePersonsHandler}
         />
         {persons}
-      </div>
+      </Fragment>
     );
   }
 }
 
-export default App;
+// Export by using the hoc and passing component and its class
+export default withClass(App, classes.App);

@@ -5,20 +5,20 @@ import Person from './Person/Person';
 // PureComponent is a normal Component that includes
 // shouldComponentUpdate with a complete props check
 class Persons extends PureComponent {
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('[Persons.js] shouldCOmponentUpdate');
-    // This works since in App.js the persons array is copied,
-    // thus the pointer also changes. This is only a matching
-    // between the pointers, no deeper
-    if (
-      nextProps.persons !== this.props.persons ||
-      nextProps.changed !== this.props.changed ||
-      nextProps.clicked !== this.props.clicked
-    ) {
-      return true;
-    }
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('[Persons.js] shouldCOmponentUpdate');
+  //   // This works since in App.js the persons array is copied,
+  //   // thus the pointer also changes. This is only a matching
+  //   // between the pointers, no deeper
+  //   if (
+  //     nextProps.persons !== this.props.persons ||
+  //     nextProps.changed !== this.props.changed ||
+  //     nextProps.clicked !== this.props.clicked
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
     console.log('[Persons.js] getSnapshotBeforeUpdate');

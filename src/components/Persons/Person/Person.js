@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import withClass from '../../hoc/withClass';
 import classes from './Person.css';
 
 class Person extends Component {
@@ -6,7 +7,11 @@ class Person extends Component {
     console.log('[Person.js] rendering...');
 
     return (
-      <div className={classes.Person}>
+      // React requires a component wrapping everything inside
+      // Aux as an empty component does this for us (instead of div or other element)
+      // <div className={classes.Person}>
+      // import classes from './Person.css';
+      <Fragment>
         <p onClick={this.props.click}>
           I'm {this.props.name} and I am {this.props.age} years old.
         </p>
@@ -16,9 +21,10 @@ class Person extends Component {
           onChange={this.props.changed}
           value={this.props.name}
         />
-      </div>
+      </Fragment>
+      // </div>
     );
   }
 }
 
-export default Person;
+export default withClass(Person, classes.Person);

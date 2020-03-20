@@ -15,7 +15,7 @@ class App extends Component {
 
   state = {
     persons: [
-      { id: 'fasd', name: 'Jeea', age: 28 },
+      { id: 'fasd', name: 'Jeea', age: '28' },
       { id: 'asfs', name: 'Pate', age: 29 },
       { id: '2421s', name: 'Kukko', age: 26 }
     ],
@@ -53,9 +53,9 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
 
-    // If a state update depends on the old state, bring prevState
-    // as an argument to setState and return a JS object with
-    // the new state as an object
+    // If a state update depends on the old state (e.g. a counter),
+    // bring prevState as an argument to setState and return
+    // a JS object with the new state as an object
     // this.setState((prevState, props) => {return {newstate}});
     this.setState({ persons: persons });
   };
